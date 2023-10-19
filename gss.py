@@ -12,20 +12,28 @@ class GSS:
 
 class Arma3(GSS):
     def get_info(self):
-        output = ''
+        output = dict()
         address = (self.ip, self.port+1)
 
-        info = a2s.info(address)
-        output += f'{info.server_name}\n'
-        output += f'{"ping :":<10} {round(info.ping*1000)}ms\n'
-        output += f'{"joueurs :":<10} {info.player_count}/{info.max_players}\n'
+        try:
+            info = a2s.info(address)
+            info_players = a2s.players(address)
+            output['status'] = 'ONLINE'
+        except Exception as e:
+            output['status'] = 'OFFLINE'
+            return output
 
-        info = a2s.players(address)
-        for p in info:
-            output += f'> {p.name:<16}'
+        output['SERVER NAME'] = info.server_name
+        output['PING'] = round(info.ping*1000)
+        output['PLAYERS'] = []
+        output['PLAYERS'].append(f'{info.player_count}/{info.max_players}')
+
+        for p in info_players:
+            player = f'{p.name:.16} '
             if p.duration < 3600:
-                output += f'{round(p.duration/60)}m\n'
+                player += f'{round(p.duration/60)}m'
             else:
-                output += f'{round(p.duration/3600)}h\n'
+                player += f'{round(p.duration/3600)}h'
+            output['PLAYERS'].append(player)
 
         return output
