@@ -13,18 +13,16 @@ class GSS:
 class Arma3(GSS):
     def get_info(self):
         output = dict()
+        output['IP'] = self.ip
+        output['PORT'] = self.port
         address = (self.ip, self.port+1)
 
         try:
             info = a2s.info(address)
             info_players = a2s.players(address)
             output['STATUS'] = 'ONLINE'
-            output['IP'] = self.ip
-            output['PORT'] = self.port
         except Exception as e:
             output['STATUS'] = 'OFFLINE'
-            output['IP'] = self.ip
-            output['PORT'] = self.port
             return output
 
         output['SERVER NAME'] = info.server_name
