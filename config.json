@@ -1,0 +1,22 @@
+{
+  "bots": [
+    {
+      "guildid": 123456789101112131,
+      "channelid": 1234567891011121314,
+      "servers": [
+        {
+          "type": "arma",
+          "ip": "127.0.0.1",
+          "port": 1234,
+          "desc": "Arma 3 Server 1"
+        },
+        {
+          "type": "arma",
+          "ip": "127.0.0.1",
+          "port": 4567,
+          "desc": "Arma 3 Server 2"
+        }
+      ]
+    }
+  ]
+}
