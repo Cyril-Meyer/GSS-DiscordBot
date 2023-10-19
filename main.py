@@ -59,9 +59,9 @@ async def on_ready():
         channel = client.get_guild(guildid).get_channel(channelid)
         messages = await channel.history(limit=64).flatten()
 
-        for m in messages:
-            if m.author.id == client.user.id:
-                await m.delete()
+        for message in messages:
+            if message.author.id == client.user.id:
+                await message.delete()
 
     # create loop for status messages
     print('GSS bot ready, starting tasks')
@@ -98,6 +98,20 @@ async def status_update():
                 raise NotImplementedError
 
             await server['message'].edit(content=message)
+
+
+@client.event
+async def close():
+    print(f'GSS closing')
+    for bot in config['bots']:
+        for server in bot['servers']:
+            info = dict()
+            info['IP'] = server['ip']
+            info['PORT'] = server['port']
+            message = utils.get_message(server['desc'], info)
+            message += 'status bot closed...'
+            await server['message'].edit(content=message)
+            # await server['message'].delete()
 
 
 client.run(token)
