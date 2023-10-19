@@ -1,13 +1,18 @@
 import argparse
+import json
+import random
+import string
+
 import discord
 from discord.ext import tasks
-import json
 
 import gss
+import utils
 
 
 # Arguments
 parser = argparse.ArgumentParser()
+parser.add_argument('--refresh', type=float, help='Refresh rate (seconds)', default=10.0)
 parser.add_argument('--token', type=str, help='discord token', default=None)
 parser.add_argument('--print-guilds-info', action='store_true')
 args = parser.parse_args()
@@ -22,6 +27,7 @@ else:
 with open('config.json', 'r') as f:
     config = json.load(f)
 '''
+# show bot configuration
 for bot in config['bots']:
     print(bot)
     for server in bot['servers']:
@@ -59,11 +65,11 @@ async def on_ready():
 
     # create loop for status messages
     print('GSS bot ready, starting tasks')
+    await status_setup()
     status_update.start()
 
 
-@tasks.loop(seconds=10.0)
-async def status_update():
+async def status_setup():
     for bot in config['bots']:
         guildid = bot['guildid']
         channelid = bot['channelid']
@@ -71,13 +77,27 @@ async def status_update():
         channel = client.get_guild(guildid).get_channel(channelid)
 
         for server in bot['servers']:
-            message = None
             if server['type'] == 'arma':
-                server_status = gss.Arma3(server['ip'], server['port'])
-                message = server_status.get_info()
+                message = f'{server["desc"]} : status bot initialization...'
             else:
                 raise NotImplementedError
-            await channel.send(message)
+
+            message = await channel.send(message)
+            server['message'] = message
+
+
+@tasks.loop(seconds=args.refresh)
+async def status_update():
+    print(f'GSS bot status update {random.choice(string.ascii_letters)}')
+    for bot in config['bots']:
+        for server in bot['servers']:
+            if server['type'] == 'arma':
+                server_status = gss.Arma3(server['ip'], server['port'])
+                message = utils.get_message(server['desc'], server_status.get_info())
+            else:
+                raise NotImplementedError
+
+            await server['message'].edit(content=message)
 
 
 client.run(token)
