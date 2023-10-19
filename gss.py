@@ -18,9 +18,9 @@ class Arma3(GSS):
         try:
             info = a2s.info(address)
             info_players = a2s.players(address)
-            output['status'] = 'ONLINE'
+            output['STATUS'] = 'ONLINE'
         except Exception as e:
-            output['status'] = 'OFFLINE'
+            output['STATUS'] = 'OFFLINE'
             return output
 
         output['SERVER NAME'] = info.server_name
