@@ -22,5 +22,10 @@ class Arma3(GSS):
 
         info = a2s.players(address)
         for p in info:
-            output += f'> {p.name:<16} {round(p.duration/3600)}h\n'
+            output += f'> {p.name:<16}'
+            if p.duration < 3600:
+                output += f'{round(p.duration/60)}m\n'
+            else:
+                output += f'{round(p.duration/3600)}h\n'
+
         return output
