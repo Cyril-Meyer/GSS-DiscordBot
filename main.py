@@ -12,7 +12,7 @@ import utils
 
 # Arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--refresh', type=float, help='Refresh rate (seconds)', default=10.0)
+parser.add_argument('--refresh', type=float, help='Refresh rate (seconds)', default=30.0)
 parser.add_argument('--token', type=str, help='discord token', default=None)
 parser.add_argument('--print-guilds-info', action='store_true')
 args = parser.parse_args()
