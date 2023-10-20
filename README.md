@@ -15,6 +15,7 @@ Game Server Status Discord Bot
     * `ip`
     * `port`
     * `desc`
+    * `messageid` (optional)
   * Currently, the supported game servers are:
     * arma
     * In theory and with a few modifications: any server supporting [Valve's Server Query Protocol](https://developer.valvesoftware.com/wiki/Server_queries)
