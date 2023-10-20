@@ -51,16 +51,20 @@ async def on_ready():
             for channel in guild.text_channels:
                  print(f'> {channel.id:<22} {channel}')
 
-    # delete older messages
+    # delete older messages if not in messageid
     for bot in config['bots']:
         guildid = bot['guildid']
         channelid = bot['channelid']
+
+        messageid_list = []
+        for server in bot['servers']:
+            messageid_list.append(server['messageid'])
 
         channel = client.get_guild(guildid).get_channel(channelid)
         messages = await channel.history(limit=64).flatten()
 
         for message in messages:
-            if message.author.id == client.user.id:
+            if message.author.id == client.user.id and message.id not in messageid_list:
                 await message.delete()
 
     # create loop for status messages
@@ -78,11 +82,17 @@ async def status_setup():
 
         for server in bot['servers']:
             if server['type'] == 'arma':
-                message = f'{server["desc"]} : status bot initialization...'
+                message_str = f'{server["desc"]} : status bot initialization...'
             else:
                 raise NotImplementedError
 
-            message = await channel.send(message)
+            # try to get and edit messageid message
+            try:
+                message = await client.get_guild(guildid).get_channel(channelid).fetch_message(server['messageid'])
+                await message.edit(content=message_str)
+            except Exception as e:
+                message = await channel.send(message_str)
+
             server['message'] = message
 
 
