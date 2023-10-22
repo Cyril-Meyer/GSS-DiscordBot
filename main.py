@@ -81,7 +81,7 @@ async def status_setup():
         channel = client.get_guild(guildid).get_channel(channelid)
 
         for server in bot['servers']:
-            if server['type'] == 'arma':
+            if server['type'] in ['ts3', 'arma3']:
                 message_str = f'{server["desc"]} : status bot initialization...'
             else:
                 raise NotImplementedError
@@ -101,7 +101,10 @@ async def status_update():
     print(f'GSS bot status update {random.choice(string.ascii_letters)}')
     for bot in config['bots']:
         for server in bot['servers']:
-            if server['type'] == 'arma':
+            if server['type'] == 'ts3':
+                server_status = gss.TS3(server['ip'], server['port'])
+                message = server_status.get_embed(server['desc'])
+            elif server['type'] == 'arma3':
                 server_status = gss.Arma3(server['ip'], server['port'])
                 message = server_status.get_embed(server['desc'])
             else:

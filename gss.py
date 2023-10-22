@@ -1,3 +1,5 @@
+import telnetlib
+
 import a2s
 import discord
 
@@ -7,8 +9,26 @@ class GSS:
         self.ip = ip
         self.port = port
 
-    def get_embed(self):
+    def get_embed(self, desc):
         raise NotImplementedError
+
+
+class TS3(GSS):
+    def get_embed(self, desc):
+        color = 0xff0000
+        try:
+            tn = telnetlib.Telnet(self.ip, self.port)
+            if 'TeamSpeak'.encode() in tn.read_until('TeamSpeak'.encode(), timeout=1):
+                color = 0x00ff00
+            tn.close()
+        except Exception as e:
+            pass
+
+        embed = discord.Embed(title=desc, color=color)
+        embed.set_thumbnail(url='https://www.teamspeak.com/user/themes/teamspeak/images/logo_inverse.svg')
+        embed.add_field(name="Server information",
+                        value=f"**IP** *{self.ip}*\n")
+        return embed
 
 
 class Arma3(GSS):
