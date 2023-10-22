@@ -120,7 +120,8 @@ async def close():
         for server in bot['servers']:
             info = dict()
             info['IP'] = server['ip']
-            info['PORT'] = server['port']
+            if server['type'] in ['ts3']:
+                info['PORT'] = server['port']
             message = utils.get_message(server['desc'], info)
             message += 'status bot closed...'
             await server['message'].edit(content=message, embed=None)
