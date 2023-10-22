@@ -89,9 +89,9 @@ async def status_setup():
             # try to get and edit messageid message
             try:
                 message = await client.get_guild(guildid).get_channel(channelid).fetch_message(server['messageid'])
-                await message.edit(content=message_str)
+                await message.edit(content=message_str, embed=None)
             except Exception as e:
-                message = await channel.send(message_str)
+                message = await channel.send(message_str, embed=None)
 
             server['message'] = message
 
@@ -103,11 +103,11 @@ async def status_update():
         for server in bot['servers']:
             if server['type'] == 'arma':
                 server_status = gss.Arma3(server['ip'], server['port'])
-                message = utils.get_message(server['desc'], server_status.get_info())
+                message = server_status.get_embed(server['desc'])
             else:
                 raise NotImplementedError
 
-            await server['message'].edit(content=message)
+            await server['message'].edit(content=None, embed=message)
 
 
 @client.event
@@ -120,7 +120,7 @@ async def close():
             info['PORT'] = server['port']
             message = utils.get_message(server['desc'], info)
             message += 'status bot closed...'
-            await server['message'].edit(content=message)
+            await server['message'].edit(content=message, embed=None)
             # await server['message'].delete()
 
 

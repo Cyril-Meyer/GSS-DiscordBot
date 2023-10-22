@@ -1,4 +1,5 @@
 import a2s
+import discord
 
 
 class GSS:
@@ -6,36 +7,55 @@ class GSS:
         self.ip = ip
         self.port = port
 
-    def get_info(self):
+    def get_embed(self):
         raise NotImplementedError
 
 
 class Arma3(GSS):
-    def get_info(self):
-        output = dict()
-        output['IP'] = self.ip
-        output['PORT'] = self.port
-        address = (self.ip, self.port+1)
+    def get_embed(self, desc):
+        address = (self.ip, self.port + 1)
 
         try:
             info = a2s.info(address)
             info_players = a2s.players(address)
-            output['STATUS'] = 'ONLINE'
+            online = True
+            color = 0x00ff00
         except Exception as e:
-            output['STATUS'] = 'OFFLINE'
-            return output
+            online = False
+            color = 0xff0000
 
-        output['SERVER NAME'] = info.server_name
-        output['PING'] = f'{round(info.ping*1000)} ms'
-        output['PLAYERS'] = []
-        output['PLAYERS'].append(f'{info.player_count}/{info.max_players}')
+        embed = discord.Embed(title=desc, color=color)
+        embed.set_thumbnail(url='https://arma3.com/assets/img/logos/arma3.png')
 
-        for p in info_players:
-            player = f'{p.name:.16} '
-            if p.duration < 3600:
-                player += f'{round(p.duration/60)} m'
-            else:
-                player += f'{round(p.duration/3600)} h'
-            output['PLAYERS'].append(player)
+        if online:
+            embed.add_field(name="Server information",
+                            value=f"{info.server_name}\n"
+                                  f"**IP** *{self.ip}*\n"
+                                  f"**Port** *{self.port}*\n"
+                                  f"**Ping** *{f'{round(info.ping*1000)} ms'}*\n",
+                            inline=False)
 
-        return output
+            players_message = f'{info.player_count}/{info.max_players}'
+
+            for i, p in enumerate(info_players):
+                if i > 32:
+                    players_message = players_message + '\n and more...'
+                    break
+
+                player = f'{p.name:.24} '
+                if p.duration < 3600:
+                    player += f'{round(p.duration / 60)} m'
+                else:
+                    player += f'{round(p.duration / 3600)} h'
+
+                players_message += f'\n{player}'
+
+            embed.add_field(name="Current players",
+                            value=players_message,
+                            inline=False)
+        else:
+            embed.add_field(name="Server information",
+                            value=f"**IP** {self.ip}\n"
+                                  f"**PORT** {self.port}\n",
+                            inline=False)
+        return embed
