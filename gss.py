@@ -25,7 +25,7 @@ class TS3(GSS):
             pass
 
         embed = discord.Embed(title=desc, color=color)
-        embed.set_thumbnail(url='https://www.teamspeak.com/user/themes/teamspeak/images/logo_inverse.svg')
+        embed.set_thumbnail(url='https://upload.wikimedia.org/wikipedia/commons/e/ec/TeamSpeak_logo_renovado.png')
         embed.add_field(name="Server information",
                         value=f"**IP** *{self.ip}*\n")
         return embed
