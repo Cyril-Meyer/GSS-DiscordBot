@@ -76,7 +76,7 @@ class Arma3(GSS):
         else:
             embed.add_field(name="Server information",
                             value=f"**OFFLINE**\n"
-                                  f"**IP** {self.ip}\n"
-                                  f"**PORT** {self.port}\n",
+                                  f"**IP** *{self.ip}*\n"
+                                  f"**Port** *{self.port}*\n",
                             inline=False)
         return embed
