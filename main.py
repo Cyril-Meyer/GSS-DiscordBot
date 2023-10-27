@@ -1,6 +1,6 @@
 import argparse
+import datetime
 import json
-import random
 import string
 
 import discord
@@ -98,7 +98,7 @@ async def status_setup():
 
 @tasks.loop(seconds=args.refresh)
 async def status_update():
-    print(f'GSS bot status update {random.choice(string.ascii_letters)}')
+    print(f'GSS bot status update {datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}')
     for bot in config['bots']:
         for server in bot['servers']:
             if server['type'] == 'ts3':
@@ -110,7 +110,10 @@ async def status_update():
             else:
                 raise NotImplementedError
 
-            await server['message'].edit(content=None, embed=message)
+            try:
+                await server['message'].edit(content=None, embed=message)
+            except Exception as e:
+                print("ERROR:", e)
 
 
 @client.event
