@@ -134,22 +134,16 @@ async def close():
             message = utils.get_message(server['desc'], info)
             message += 'status bot closed...'
 
-            '''
-            closed = None
-            while closed is None:
+            closed = False
+            while not closed:
                 try:
-                    result = await server['message'].edit(content=message, embed=None)
+                    await server['message'].edit(content=message, embed=None)
+                    closed = True
                 except Exception as e:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     print(f"ERROR: L{exc_tb.tb_lineno:4} -", e)
                     await asyncio.sleep(args.refresh)
                     pass
-            '''
-            try:
-                await server['message'].edit(content=message, embed=None)
-            except Exception as e:
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                print(f"ERROR: L{exc_tb.tb_lineno:4} -", e)
             # await server['message'].delete()
 
 
