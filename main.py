@@ -82,7 +82,7 @@ async def status_setup():
         channel = client.get_guild(guildid).get_channel(channelid)
 
         for server in bot['servers']:
-            if server['type'] in ['ts3', 'arma3']:
+            if server['type'] in ['ts3', 'arma3', 'minecraft']:
                 message_str = f'{server["desc"]} : status bot initialization...'
             else:
                 raise NotImplementedError
@@ -108,6 +108,9 @@ async def status_update():
             elif server['type'] == 'arma3':
                 server_status = gss.Arma3(server['ip'], server['port'])
                 message = server_status.get_embed(server['desc'])
+            elif server['type'] == 'minecraft':
+                server_status = gss.Minecraft(server['ip'], server['port'])
+                message = server_status.get_embed(server['desc'])
             else:
                 raise NotImplementedError
 
@@ -121,6 +124,7 @@ async def status_update():
 @client.event
 async def close():
     print(f'GSS closing')
+    status_update.stop()
     for bot in config['bots']:
         for server in bot['servers']:
             info = dict()
