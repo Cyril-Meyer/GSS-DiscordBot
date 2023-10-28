@@ -111,7 +111,7 @@ class Minecraft(GSS):
                                   f"**IP** *{self.ip}*\n"
                                   f"**Port** *{self.port}*\n"
                                   f"**Version** *{status.version.name}*\n"
-                                  f"**Ping** *{f'{round(status.latency*1000)} ms'}*\n",
+                                  f"**Ping** *{f'{round(status.latency)} ms'}*\n",
                             inline=False)
 
             embed.add_field(name="Current players",
