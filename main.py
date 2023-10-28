@@ -1,14 +1,15 @@
 import argparse
+import asyncio
 import datetime
 import json
 import string
+import sys
 
 import discord
 from discord.ext import tasks
 
 import gss
 import utils
-
 
 # Arguments
 parser = argparse.ArgumentParser()
@@ -49,7 +50,7 @@ async def on_ready():
             print('guild id  ', guild.id)
             print('guild name', guild.name)
             for channel in guild.text_channels:
-                 print(f'> {channel.id:<22} {channel}')
+                print(f'> {channel.id:<22} {channel}')
 
     # delete older messages if not in messageid
     for bot in config['bots']:
@@ -113,7 +114,8 @@ async def status_update():
             try:
                 await server['message'].edit(content=None, embed=message)
             except Exception as e:
-                print("ERROR:", e)
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                print(f"ERROR: L{exc_tb.tb_lineno:4} -", e)
 
 
 @client.event
@@ -127,7 +129,23 @@ async def close():
                 info['PORT'] = server['port']
             message = utils.get_message(server['desc'], info)
             message += 'status bot closed...'
-            await server['message'].edit(content=message, embed=None)
+
+            '''
+            closed = None
+            while closed is None:
+                try:
+                    result = await server['message'].edit(content=message, embed=None)
+                except Exception as e:
+                    exc_type, exc_obj, exc_tb = sys.exc_info()
+                    print(f"ERROR: L{exc_tb.tb_lineno:4} -", e)
+                    await asyncio.sleep(args.refresh)
+                    pass
+            '''
+            try:
+                await server['message'].edit(content=message, embed=None)
+            except Exception as e:
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                print(f"ERROR: L{exc_tb.tb_lineno:4} -", e)
             # await server['message'].delete()
 
 
