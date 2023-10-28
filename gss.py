@@ -1,3 +1,4 @@
+import datetime
 import telnetlib
 
 import a2s
@@ -27,7 +28,11 @@ class TS3(GSS):
         embed = discord.Embed(title=desc, color=color)
         embed.set_thumbnail(url='https://upload.wikimedia.org/wikipedia/commons/e/ec/TeamSpeak_logo_renovado.png')
         embed.add_field(name="Server information",
-                        value=f"**IP** *{self.ip}*\n")
+                        value=f"**IP** *{self.ip}*\n",
+                        inline=False)
+        embed.add_field(name="Last update",
+                        value=f'{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+                        inline=False)
         return embed
 
 
@@ -79,4 +84,7 @@ class Arma3(GSS):
                                   f"**IP** *{self.ip}*\n"
                                   f"**Port** *{self.port}*\n",
                             inline=False)
+        embed.add_field(name="Last update",
+                        value=f'{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+                        inline=False)
         return embed
