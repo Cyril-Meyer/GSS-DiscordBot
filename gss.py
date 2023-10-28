@@ -3,6 +3,7 @@ import telnetlib
 
 import a2s
 import discord
+import mcstatus
 
 
 class GSS:
@@ -84,6 +85,45 @@ class Arma3(GSS):
                                   f"**IP** *{self.ip}*\n"
                                   f"**Port** *{self.port}*\n",
                             inline=False)
+        embed.add_field(name="Last update",
+                        value=f'{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+                        inline=False)
+        return embed
+
+
+class Minecraft(GSS):
+    def get_embed(self, desc):
+        try:
+            server = mcstatus.JavaServer.lookup(f"{self.ip}:{self.port}")
+            status = server.status()
+            online = True
+            color = 0x00ff00
+        except Exception as e:
+            online = False
+            color = 0xff0000
+
+        embed = discord.Embed(title=desc, color=color)
+        embed.set_thumbnail(url='https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png')
+
+        if online:
+            embed.add_field(name="Server information",
+                            value=f"{status.description}\n"
+                                  f"**IP** *{self.ip}*\n"
+                                  f"**Port** *{self.port}*\n"
+                                  f"**Version** *{status.version.name}*\n"
+                                  f"**Ping** *{f'{round(status.latency*1000)} ms'}*\n",
+                            inline=False)
+
+            embed.add_field(name="Current players",
+                            value=f"{status.players.online}/{status.players.max}",
+                            inline=False)
+        else:
+            embed.add_field(name="Server information",
+                            value=f"**OFFLINE**\n"
+                                  f"**IP** *{self.ip}*\n"
+                                  f"**Port** *{self.port}*\n",
+                            inline=False)
+
         embed.add_field(name="Last update",
                         value=f'{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
                         inline=False)
