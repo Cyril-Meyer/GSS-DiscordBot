@@ -82,7 +82,7 @@ async def status_setup():
         channel = client.get_guild(guildid).get_channel(channelid)
 
         for server in bot['servers']:
-            if server['type'] in ['ts3', 'a2s', 'arma3', 'pz', 'minecraft']:
+            if server['type'] in ['ts3', 'a2s', 'arma3', 'pz', 'minecraft', 'eco']:
                 message_str = f'{server["desc"]} : status bot initialization...'
             else:
                 raise NotImplementedError
@@ -116,6 +116,9 @@ async def status_update():
                 message = server_status.get_embed(server['desc'])
             elif server['type'] == 'minecraft':
                 server_status = gss.Minecraft(server['ip'], server['port'])
+                message = server_status.get_embed(server['desc'])
+            elif server['type'] == 'eco':
+                server_status = gss.Eco(server['ip'], server['port'])
                 message = server_status.get_embed(server['desc'])
             else:
                 raise NotImplementedError

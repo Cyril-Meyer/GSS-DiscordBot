@@ -23,6 +23,7 @@ Game Server Status Discord Bot
     * pz (project zomboid)
     * ts3 (teamspeak)
     * minecraft
+    * eco
 
 ```
 usage: main.py [-h] [--refresh REFRESH] [--token TOKEN] [--print-guilds-info]
