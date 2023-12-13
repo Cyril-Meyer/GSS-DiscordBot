@@ -10,6 +10,7 @@ class GSS:
     def __init__(self, ip, port):
         self.ip = ip
         self.port = port
+        self.address = (self.ip, self.port)
 
     def get_embed(self, desc):
         raise NotImplementedError
@@ -37,13 +38,11 @@ class TS3(GSS):
         return embed
 
 
-class Arma3(GSS):
+class A2S(GSS):
     def get_embed(self, desc):
-        address = (self.ip, self.port + 1)
-
         try:
-            info = a2s.info(address)
-            info_players = a2s.players(address)
+            info = a2s.info(self.address)
+            info_players = a2s.players(self.address)
             online = True
             color = 0x00ff00
         except Exception as e:
@@ -51,7 +50,6 @@ class Arma3(GSS):
             color = 0xff0000
 
         embed = discord.Embed(title=desc, color=color)
-        embed.set_thumbnail(url='https://arma3.com/assets/img/logos/arma3.png')
 
         if online:
             embed.add_field(name="Server information",
@@ -88,6 +86,26 @@ class Arma3(GSS):
         embed.add_field(name="Last update",
                         value=f'{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
                         inline=False)
+        return embed
+
+
+class Arma3(A2S):
+    def __init__(self, ip, port):
+        super().__init__(ip, port)
+        self.address = (self.ip, self.port + 1)
+
+    def get_embed(self, desc):
+        embed = super().get_embed(desc)
+        embed.set_thumbnail(url='https://arma3.com/assets/img/logos/arma3.png')
+
+        return embed
+
+
+class ProjectZomboid(A2S):
+    def get_embed(self, desc):
+        embed = super().get_embed(desc)
+        embed.set_thumbnail(url='https://pzwiki.net/w/images/b/b7/PzLogo_BloodSplatter.png')
+
         return embed
 
 
