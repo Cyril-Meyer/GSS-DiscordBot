@@ -173,7 +173,7 @@ class Eco(GSS):
                                   f"**Port** *{self.port}*\n"
                                   f"**Version** *{status['Version']}*\n"
                                   f"**Ping** *{f'{round(latency)} ms'}*\n"
-                                  f"**Time left** *{datetime.timedelta(seconds=status['TimeLeft'])}*\n",
+                                  f"**Time left** *{datetime.timedelta(seconds=round(status['TimeLeft']))}*\n",
                             inline=False)
 
             players_message = f"{status['OnlinePlayers']}/{status['TotalPlayers']}"
