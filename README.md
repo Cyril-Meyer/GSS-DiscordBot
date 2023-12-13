@@ -59,3 +59,10 @@ docker logs -f gssdiscordbot-container
 docker attach gssdiscordbot-container
 - CTRL+C -
 ```
+
+**run with docker development**
+```
+# Comment or remove the COPY command in the Dockerfile
+# COPY . .
+docker run --rm -it -d -v $(pwd):/usr/src/app --name gssdiscordbot-container gssdiscordbot
+```
