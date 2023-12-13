@@ -40,6 +40,7 @@ python -m venv venv
 # windows
 .\venv\Scripts\activate.bat
 pip install -U pip
+pip install requests==2.31.0
 pip install discord.py==1.7.3
 pip install python-a2s==1.3.0
 pip install mcstatus==9.4.2
