@@ -4,6 +4,7 @@ import telnetlib
 import a2s
 import discord
 import mcstatus
+import requests
 
 
 class GSS:
@@ -135,6 +136,58 @@ class Minecraft(GSS):
             embed.add_field(name="Current players",
                             value=f"{status.players.online}/{status.players.max}",
                             inline=False)
+        else:
+            embed.add_field(name="Server information",
+                            value=f"**OFFLINE**\n"
+                                  f"**IP** *{self.ip}*\n"
+                                  f"**Port** *{self.port}*\n",
+                            inline=False)
+
+        embed.add_field(name="Last update",
+                        value=f'{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+                        inline=False)
+        return embed
+
+
+class Eco(GSS):
+    def get_embed(self, desc):
+        try:
+            server = requests.get(f'http://{self.ip}:{self.port+1}/info', timeout=1)
+            if not server.status_code == 200:
+                raise Exception
+            latency = server.elapsed.total_seconds()*1000
+            status = server.json()
+            online = True
+            color = 0x00ff00
+        except Exception as e:
+            online = False
+            color = 0xff0000
+
+        embed = discord.Embed(title=desc, color=color)
+        embed.set_thumbnail(url='https://play.eco/assets/images/eco-logo.png')
+
+        if online:
+            embed.add_field(name="Server information",
+                            value=f"{status['Description']}\n"
+                                  f"**IP** *{self.ip}*\n"
+                                  f"**Port** *{self.port}*\n"
+                                  f"**Version** *{status['Version']}*\n"
+                                  f"**Ping** *{f'{round(latency)} ms'}*\n"
+                                  f"**Time left** *{datetime.timedelta(seconds=status['TimeLeft'])}*\n",
+                            inline=False)
+
+            players_message = f"{status['OnlinePlayers']}/{status['TotalPlayers']}"
+
+            for i, p in enumerate(status['OnlinePlayersNames']):
+                if i > 32:
+                    players_message = players_message + '\n and more...'
+                    break
+                players_message += f'\n{p:.24}'
+
+            embed.add_field(name="Current players",
+                            value=players_message,
+                            inline=False)
+
         else:
             embed.add_field(name="Server information",
                             value=f"**OFFLINE**\n"
