@@ -16,10 +16,13 @@ Game Server Status Discord Bot
     * `port`
     * `desc`
     * `messageid` (optional)
-  * Currently, the supported game servers are:
-    * arma
-    * In theory and with a few modifications: any server supporting [Valve's Server Query Protocol](https://developer.valvesoftware.com/wiki/Server_queries)
-    thanks to [python-a2s](https://github.com/Yepoleb/python-a2s).
+  * Currently, the supported servers are:
+    * a2s (any server supporting [Valve's Server Query Protocol](https://developer.valvesoftware.com/wiki/Server_queries)
+    thanks to [python-a2s](https://github.com/Yepoleb/python-a2s))
+    * arma3
+    * pz (project zomboid)
+    * ts3 (teamspeak)
+    * minecraft
 
 ```
 usage: main.py [-h] [--refresh REFRESH] [--token TOKEN] [--print-guilds-info]
