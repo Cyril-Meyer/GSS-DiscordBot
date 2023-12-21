@@ -199,3 +199,40 @@ class Eco(GSS):
                         value=f'{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
                         inline=False)
         return embed
+
+
+class Bannerlord(GSS):
+    def get_embed(self, desc):
+        try:
+            server = requests.get(f'http://{self.ip}:{self.port}/maps/list', timeout=1)
+            if not server.status_code == 200:
+                raise Exception
+            latency = server.elapsed.total_seconds()*1000
+            status = server.json()
+            online = True
+            color = 0x00ff00
+        except Exception as e:
+            online = False
+            color = 0xff0000
+
+        embed = discord.Embed(title=desc, color=color)
+        embed.set_thumbnail(url='https://upload.wikimedia.org/wikipedia/commons/f/fe/Mount_%26_Blade_II_Bannerlord_logo.png')
+
+        if online:
+            embed.add_field(name="Server information",
+                            value=f"**IP** *{self.ip}*\n"
+                                  f"**Port** *{self.port}*\n"
+                                  f"**Map** *{status['currentlyPlaying']}*\n"
+                                  f"**Ping** *{f'{round(latency)} ms'}*\n",
+                            inline=False)
+        else:
+            embed.add_field(name="Server information",
+                            value=f"**OFFLINE**\n"
+                                  f"**IP** *{self.ip}*\n"
+                                  f"**Port** *{self.port}*\n",
+                            inline=False)
+
+        embed.add_field(name="Last update",
+                        value=f'{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+                        inline=False)
+        return embed

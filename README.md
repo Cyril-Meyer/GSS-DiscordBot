@@ -24,6 +24,7 @@ Game Server Status Discord Bot
     * ts3 (teamspeak)
     * minecraft
     * eco
+    * bannerlord
 
 ```
 usage: main.py [-h] [--refresh REFRESH] [--token TOKEN] [--print-guilds-info]
