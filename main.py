@@ -13,7 +13,8 @@ import utils
 
 # Arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--refresh', type=float, help='Refresh rate (seconds)', default=30.0)
+parser.add_argument('--refresh', type=float, help='Refresh rate (seconds)', default=60.0)
+parser.add_argument('--request-timer', type=float, help='Sleep time after request', default=5.0)
 parser.add_argument('--token', type=str, help='discord token', default=None)
 parser.add_argument('--print-guilds-info', action='store_true')
 args = parser.parse_args()
@@ -93,6 +94,7 @@ async def status_setup():
                 await message.edit(content=message_str, embed=None)
             except Exception as e:
                 message = await channel.send(message_str, embed=None)
+            await asyncio.sleep(args.request_timer)
 
             server['message'] = message
 
@@ -131,6 +133,7 @@ async def status_update():
             except Exception as e:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 print(f"ERROR: L{exc_tb.tb_lineno:4} -", e)
+            await asyncio.sleep(args.request_timer)
 
 
 @client.event

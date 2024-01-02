@@ -27,14 +27,20 @@ Game Server Status Discord Bot
     * bannerlord
 
 ```
-usage: main.py [-h] [--refresh REFRESH] [--token TOKEN] [--print-guilds-info]
+usage: main.py [-h] [--refresh REFRESH] [--request-timer REQUEST_TIMER]
+               [--token TOKEN] [--print-guilds-info]
 
 optional arguments:
-  -h, --help           show this help message and exit
-  --refresh REFRESH    Refresh rate (seconds)
-  --token TOKEN        discord token
+  -h, --help            show this help message and exit
+  --refresh REFRESH     Refresh rate (seconds)
+  --request-timer REQUEST_TIMER
+                        Sleep time after request
+  --token TOKEN         discord token
   --print-guilds-info
+
 ```
+Refresh rate must be bigger than (request timer x number of messages).
+
 
 **setup venv and install dependency**
 ```
