@@ -1,5 +1,7 @@
 import datetime
+import time
 import telnetlib
+import socket
 
 import a2s
 import discord
@@ -238,6 +240,53 @@ class Bannerlord(GSS):
                             value=f"**IP** *{self.ip}*\n"
                                   f"**Port** *{self.port}*\n"
                                   f"**Map** *{status['currentlyPlaying']}*\n"
+                                  f"**Ping** *{f'{round(latency)} ms'}*\n",
+                            inline=False)
+        else:
+            embed.add_field(name="Server information",
+                            value=f"**OFFLINE**\n"
+                                  f"**IP** *{self.ip}*\n"
+                                  f"**Port** *{self.port}*\n",
+                            inline=False)
+
+        embed.add_field(name="Last update",
+                        value=f'{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+                        inline=False)
+        return embed
+
+
+class Paleworld(GSS):
+    def get_embed(self, desc):
+        try:
+            message = "HELLO"
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP socket
+            sock.settimeout(1)  # 1s timeout
+
+            t0 = time.time()
+            sock.sendto(message.encode('utf-8'), self.address)
+            data, address = sock.recvfrom(32)
+            t1 = time.time()
+
+            if not address == self.address:
+                raise Exception
+            if not len(data) >= 8:
+                raise Exception
+
+            latency = (t1 - t0) * 1000
+            online = True
+            color = 0x00ff00
+        except Exception as e:
+            online = False
+            color = 0xff0000
+
+        embed = discord.Embed(title=desc, color=color)
+        embed.set_thumbnail(
+            url='https://cdn.akamai.steamstatic.com/steam/apps/1623730/capsule_616x353.jpg')
+
+        if online:
+            embed.add_field(name="Server information",
+                            value=f"**IP** *{self.ip}*\n"
+                                  f"**Port** *{self.port}*\n"
                                   f"**Ping** *{f'{round(latency)} ms'}*\n",
                             inline=False)
         else:
