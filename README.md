@@ -69,6 +69,10 @@ docker logs -f gssdiscordbot-container
 docker attach gssdiscordbot-container
 - CTRL+C -
 ```
+You may want to change the timezone of the container, example for CET:
+```
+ENV TZ="Europe/Paris"
+```
 
 **run with docker development**
 ```
