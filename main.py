@@ -28,6 +28,10 @@ else:
 # Configuration file
 with open('config.json', 'r') as f:
     config = json.load(f)
+
+if args.refresh < args.request_timer * int(str(config).count("'type': ")):
+    raise AssertionError('Refresh rate must be bigger than (request timer x number of messages).')
+
 '''
 # show bot configuration
 for bot in config['bots']:

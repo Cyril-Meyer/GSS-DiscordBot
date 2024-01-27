@@ -139,7 +139,7 @@ class Minecraft(GSS):
             color = 0xff0000
 
         embed = discord.Embed(title=desc, color=color)
-        embed.set_thumbnail(url='https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png')
+        embed.set_thumbnail(url='https://cdn.icon-icons.com/icons2/2699/PNG/512/minecraft_logo_icon_168974.png')
 
         if online:
             embed.add_field(name="Server information",
