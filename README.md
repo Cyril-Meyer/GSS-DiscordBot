@@ -27,7 +27,7 @@ Game Server Status Discord Bot
     * minecraft
     * eco
     * bannerlord
-    * paleworld
+    * palworld
 
 ```
 usage: main.py [-h] [--refresh REFRESH] [--request-timer REQUEST_TIMER]

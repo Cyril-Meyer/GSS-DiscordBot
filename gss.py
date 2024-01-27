@@ -255,7 +255,7 @@ class Bannerlord(GSS):
         return embed
 
 
-class Paleworld(GSS):
+class Palworld(GSS):
     def get_embed(self, desc):
         try:
             message = "HELLO"

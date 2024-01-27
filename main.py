@@ -88,7 +88,7 @@ async def status_setup():
 
         for server in bot['servers']:
             if server['type'] in ['ts3', 'a2s', 'arma3', 'pz', 'enshrouded', 'minecraft', 'eco', 'bannerlord',
-                                  'paleworld']:
+                                  'palworld']:
                 message_str = f'{server["desc"]} : status bot initialization...'
             else:
                 raise NotImplementedError
@@ -133,8 +133,8 @@ async def status_update():
             elif server['type'] == 'bannerlord':
                 server_status = gss.Bannerlord(server['ip'], server['port'])
                 message = server_status.get_embed(server['desc'])
-            elif server['type'] == 'paleworld':
-                server_status = gss.Paleworld(server['ip'], server['port'])
+            elif server['type'] == 'palworld':
+                server_status = gss.Palworld(server['ip'], server['port'])
                 message = server_status.get_embed(server['desc'])
             else:
                 raise NotImplementedError
