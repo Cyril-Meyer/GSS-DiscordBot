@@ -16,11 +16,13 @@ Game Server Status Discord Bot
     * `port`
     * `desc`
     * `messageid` (optional)
+    * `qport` (optional, override port for a2s query)
   * Currently, the supported servers are:
     * a2s (any server supporting [Valve's Server Query Protocol](https://developer.valvesoftware.com/wiki/Server_queries)
     thanks to [python-a2s](https://github.com/Yepoleb/python-a2s))
-    * arma3
-    * pz (project zomboid)
+      * arma3
+      * pz (project zomboid)
+      * enshrouded
     * ts3 (teamspeak)
     * minecraft
     * eco

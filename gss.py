@@ -40,7 +40,12 @@ class TS3(GSS):
 
 
 class A2S(GSS):
-    def get_embed(self, desc):
+    def __init__(self, ip, port, qport=None):
+        super().__init__(ip, port)
+        if qport is not None:
+            self.address = (self.ip, qport)
+
+    def get_embed(self, desc, players_name=True):
         try:
             info = a2s.info(self.address)
             info_players = a2s.players(self.address)
@@ -62,18 +67,19 @@ class A2S(GSS):
 
             players_message = f'{info.player_count}/{info.max_players}'
 
-            for i, p in enumerate(info_players):
-                if i > 32:
-                    players_message = players_message + '\n and more...'
-                    break
+            if players_name:
+                for i, p in enumerate(info_players):
+                    if i > 32:
+                        players_message = players_message + '\n and more...'
+                        break
 
-                player = f'{p.name:.24} '
-                if p.duration < 3600:
-                    player += f'{round(p.duration / 60)} m'
-                else:
-                    player += f'{round(p.duration / 3600)} h'
+                    player = f'{p.name:.24} '
+                    if p.duration < 3600:
+                        player += f'{round(p.duration / 60)} m'
+                    else:
+                        player += f'{round(p.duration / 3600)} h'
 
-                players_message += f'\n{player}'
+                    players_message += f'\n{player}'
 
             embed.add_field(name="Current players",
                             value=players_message,
@@ -91,9 +97,10 @@ class A2S(GSS):
 
 
 class Arma3(A2S):
-    def __init__(self, ip, port):
-        super().__init__(ip, port)
-        self.address = (self.ip, self.port + 1)
+    def __init__(self, ip, port, qport=None):
+        if qport is None:
+            qport = port + 1
+        super().__init__(ip, port, qport)
 
     def get_embed(self, desc):
         embed = super().get_embed(desc)
@@ -106,6 +113,14 @@ class ProjectZomboid(A2S):
     def get_embed(self, desc):
         embed = super().get_embed(desc)
         embed.set_thumbnail(url='https://pzwiki.net/w/images/b/b7/PzLogo_BloodSplatter.png')
+
+        return embed
+
+
+class Enshrouded(A2S):
+    def get_embed(self, desc):
+        embed = super().get_embed(desc, players_name=False)
+        embed.set_thumbnail(url='https://www.enshrouded.com/media/Meta/og-image-1200x628.jpg')
 
         return embed
 

@@ -83,7 +83,7 @@ async def status_setup():
         channel = client.get_guild(guildid).get_channel(channelid)
 
         for server in bot['servers']:
-            if server['type'] in ['ts3', 'a2s', 'arma3', 'pz', 'minecraft', 'eco', 'bannerlord']:
+            if server['type'] in ['ts3', 'a2s', 'arma3', 'pz', 'enshrouded', 'minecraft', 'eco', 'bannerlord']:
                 message_str = f'{server["desc"]} : status bot initialization...'
             else:
                 raise NotImplementedError
@@ -108,13 +108,16 @@ async def status_update():
                 server_status = gss.TS3(server['ip'], server['port'])
                 message = server_status.get_embed(server['desc'])
             elif server['type'] == 'a2s':
-                server_status = gss.A2S(server['ip'], server['port'])
+                server_status = gss.A2S(server['ip'], server['port'], server.get('qport'))
                 message = server_status.get_embed(server['desc'])
             elif server['type'] == 'arma3':
-                server_status = gss.Arma3(server['ip'], server['port'])
+                server_status = gss.Arma3(server['ip'], server['port'], server.get('qport'))
                 message = server_status.get_embed(server['desc'])
             elif server['type'] == 'pz':
-                server_status = gss.ProjectZomboid(server['ip'], server['port'])
+                server_status = gss.ProjectZomboid(server['ip'], server['port'], server.get('qport'))
+                message = server_status.get_embed(server['desc'])
+            elif server['type'] == 'enshrouded':
+                server_status = gss.Enshrouded(server['ip'], server['port'], server.get('qport'))
                 message = server_status.get_embed(server['desc'])
             elif server['type'] == 'minecraft':
                 server_status = gss.Minecraft(server['ip'], server['port'])
