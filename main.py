@@ -87,8 +87,8 @@ async def status_setup():
         channel = client.get_guild(guildid).get_channel(channelid)
 
         for server in bot['servers']:
-            if server['type'] in ['ts3', 'a2s', 'arma3', 'pz', 'enshrouded', 'minecraft', 'eco', 'bannerlord',
-                                  'palworld']:
+            if server['type'] in ['ts3', 'a2s', 'arma3', 'armareforger', 'pz', 'enshrouded', 'minecraft', 'eco',
+                                  'bannerlord', 'palworld']:
                 message_str = f'{server["desc"]} : status bot initialization...'
             else:
                 raise NotImplementedError
@@ -117,6 +117,9 @@ async def status_update():
                 message = server_status.get_embed(server['desc'])
             elif server['type'] == 'arma3':
                 server_status = gss.Arma3(server['ip'], server['port'], server.get('qport'))
+                message = server_status.get_embed(server['desc'])
+            elif server['type'] == 'armareforger':
+                server_status = gss.ArmaReforger(server['ip'], server['port'], server.get('qport'))
                 message = server_status.get_embed(server['desc'])
             elif server['type'] == 'pz':
                 server_status = gss.ProjectZomboid(server['ip'], server['port'], server.get('qport'))
