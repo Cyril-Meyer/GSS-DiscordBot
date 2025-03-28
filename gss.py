@@ -111,6 +111,14 @@ class Arma3(A2S):
         return embed
 
 
+class ArmaReforger(A2S):
+    def get_embed(self, desc):
+        embed = super().get_embed(desc, players_name=False)
+        embed.set_thumbnail(url='https://cdn2.steamgriddb.com/logo_thumb/9fbd8123f5e4ba247d713039130ba0a1.png')
+
+        return embed
+
+
 class ProjectZomboid(A2S):
     def get_embed(self, desc):
         embed = super().get_embed(desc)
